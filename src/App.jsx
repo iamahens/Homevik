@@ -9,7 +9,6 @@ import WhyUs from "./components/WhyUs"
 import FAQ from "./components/FAQ"
 import Footer from "./components/Footer"
 import ControlOptions from "./components/ControlOptions"
-import InteractiveControl from "./components/InteractiveControl"
 import AboutUs from "./components/AboutUs"
 import Services from "./components/Services"
 
@@ -28,7 +27,7 @@ function App() {
         <WhyUs/>
         <ControlOptions/>
         <HowItWorks/>
-        <InteractiveControl/>
+        
         <Testimonials/>
         <FAQ/>
         <Contact/>

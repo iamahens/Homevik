@@ -100,7 +100,7 @@ const Features = () => {
                     >
                         <div className="relative rounded-2xl overflow-hidden shadow-2xl h-[500px] transition-transform duration-300 hover:scale-105">
                             <img 
-                                src="https://images.unsplash.com/photo-1593085512500-5d55148d6f0d?q=80&w=1887&auto=format&fit=crop" 
+                                src="/voiceassistant.jpg" 
                                 alt="Man interacting with a smart home device" 
                                 className="w-full h-full object-cover"
                             />
@@ -124,7 +124,7 @@ const Features = () => {
                             </div>
                         </div>
                         
-                        <div className={`bg-slate-800/50 backdrop-blur-lg p-8 rounded-2xl shadow-xl border border-slate-700/50 transition-all duration-700 ease-in-out transform md:-ml-54 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`} style={{ transitionDelay: '0.6s' }}>
+                        <div className={`bg-slate-800/50 backdrop-blur-lg p-8 rounded-2xl shadow-xl border border-slate-700/50 transition-all duration-700 ease-in-out transform md:-ml-80 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`} style={{ transitionDelay: '0.6s' }}>
                              <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
                                 {features.map((feature, index) => (
                                     <FeaturePill 
