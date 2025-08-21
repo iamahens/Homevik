@@ -1,31 +1,57 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-// SVG Icons Component
-const Icon = ({ name, className }) => {
-    const icons = {
-        light: <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />,
-        climate: <path strokeLinecap="round" strokeLinejoin="round" d="M12 6V4m0 16v-2m8-6h2M4 12H2m15.364-5.364l1.414-1.414M4.222 19.778l1.414-1.414m12.728 0l-1.414-1.414M5.636 5.636l-1.414-1.414M12 18a6 6 0 100-12 6 6 0 000 12z" />,
-        security: <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />,
-    };
-    return (
-        <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
-            {icons[name]}
-        </svg>
-    );
+// Custom hook for detecting when an element is in the viewport
+const useOnScreen = (options) => {
+    const ref = useRef(null);
+    const [isIntersecting, setIntersecting] = useState(false);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(([entry]) => {
+            if (entry.isIntersecting) {
+                setIntersecting(true);
+                observer.unobserve(entry.target);
+            }
+        }, options);
+
+        if (ref.current) {
+            observer.observe(ref.current);
+        }
+
+        return () => {
+            if (ref.current) {
+                observer.unobserve(ref.current);
+            }
+        };
+    }, [ref, options]);
+
+    return [ref, isIntersecting];
 };
 
-// A new, more visually appealing card component for this section
-const FeatureCard = ({ icon, title, description, isVisible, delay }) => {
+// SVG Icon for the checkmark
+const CheckIcon = () => (
+    <svg className="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+    </svg>
+);
+
+// A new component for the feature list items to match the inspiration
+const FeaturePill = ({ title, description, isVisible, delay }) => {
     return (
         <div 
-            className={`feature-card bg-slate-800/40 backdrop-blur-lg p-8 rounded-2xl text-center border border-slate-700/50 transition-all duration-700 ease-in-out relative transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+            className={`transition-all duration-700 ease-in-out transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}
             style={{ transitionDelay: delay }}
         >
-            <div className="icon-container mb-6 inline-block p-4 rounded-full transition-all duration-300 ease-in-out" style={{ transformStyle: 'preserve-3d' }}>
-                <Icon name={icon} className="w-12 h-12 text-cyan-400" />
+            <div className="flex items-start">
+                <div className="flex-shrink-0">
+                    <div className="bg-slate-800 p-2 rounded-full">
+                        <CheckIcon />
+                    </div>
+                </div>
+                <div className="ml-4">
+                    <h4 className="text-lg font-bold text-white">{title}</h4>
+                    <p className="text-gray-400">{description}</p>
+                </div>
             </div>
-            <h3 className="text-2xl font-bold mb-3 text-white">{title}</h3>
-            <p className="text-gray-400 leading-relaxed">{description}</p>
         </div>
     );
 };
@@ -40,14 +66,10 @@ const Features = () => {
             ([entry]) => {
                 if (entry.isIntersecting) {
                     setIsVisible(true);
-                    observer.disconnect(); // Stop observing once it's visible
+                    observer.disconnect();
                 }
             },
-            {
-                root: null,
-                rootMargin: '0px',
-                threshold: 0.2 // Trigger when 20% of the section is visible
-            }
+            { threshold: 0.2 }
         );
 
         if (sectionRef.current) {
@@ -62,66 +84,61 @@ const Features = () => {
     }, []);
 
     const features = [
-        { icon: 'light', title: 'Dynamic Ambiance', description: 'Lighting that syncs with your day, from sunrise hues to focused work light, all automated.' },
-        { icon: 'climate', title: 'Predictive Comfort', description: 'Climate control that learns your patterns, saving energy while perfecting your environment.' },
-        { icon: 'security', title: 'Vigilant Security', description: 'Proactive security that monitors, alerts, and gives you control from anywhere in the world.' }
+        { title: 'Automation Systems', description: 'Lighting, climate, and security that work in harmony.' },
+        { title: 'Enhanced Comfort', description: 'Your home adapts to your needs, creating the perfect environment.' },
+        { title: 'Security & Efficiency', description: 'Peace of mind and energy savings, seamlessly integrated.' },
     ];
 
     return (
-        <section id="features" ref={sectionRef} className="py-24 bg-slate-900 relative overflow-hidden">
-            <div className="absolute inset-0 z-0 opacity-[0.03] section-bg-pattern"></div>
-            <div className="container mx-auto px-6 relative z-10">
-                <div className="text-center mb-16 transition-all duration-700 ease-in-out transform"
-                     style={{ transitionDelay: '0.2s', opacity: isVisible ? 1 : 0, transform: isVisible ? 'translateY(0)' : 'translateY(20px)' }}>
-                    <h3 className="text-cyan-400 font-semibold tracking-widest mb-2">CORE PILLARS</h3>
-                    <h2 className="text-3xl md:text-4xl font-bold text-white">The Epicenter of Your Smart World</h2>
-                    <p className="text-gray-400 mt-4 max-w-2xl mx-auto">One intuitive system to orchestrate every aspect of your home environment, from anywhere on the globe.</p>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {features.map((feature, index) => (
-                        <FeatureCard
-                            key={feature.title}
-                            {...feature}
-                            isVisible={isVisible}
-                            delay={`${0.4 + index * 0.2}s`}
-                        />
-                    ))}
+        <section id="features" ref={sectionRef} className="py-24 bg-slate-900 text-white">
+            <div className="container mx-auto px-6">
+                <div className="grid md:grid-cols-2 gap-8 items-center">
+                    {/* Left Column: Image */}
+                    <div 
+                        className={`transition-all duration-1000 ease-in-out transform ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
+                        style={{ transitionDelay: '0.2s' }}
+                    >
+                        <div className="relative rounded-2xl overflow-hidden shadow-2xl h-[500px] transition-transform duration-300 hover:scale-105">
+                            <img 
+                                src="https://images.unsplash.com/photo-1593085512500-5d55148d6f0d?q=80&w=1887&auto=format&fit=crop" 
+                                alt="Man interacting with a smart home device" 
+                                className="w-full h-full object-cover"
+                            />
+                        </div>
+                    </div>
+
+                    {/* Right Column: Text Content */}
+                    <div className="text-left relative">
+                        <div 
+                            className={`transition-all duration-700 ease-in-out transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}
+                            style={{ transitionDelay: '0.4s' }}
+                        >
+                            <div className="p-8">
+                                <h3 className="text-cyan-400 font-semibold tracking-widest mb-2 uppercase">About Automated Home Solutions</h3>
+                                <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+                                    We Specialize In Designing And Installing State-Of-The-Art Home Automation Systems.
+                                </h2>
+                                <p className="text-gray-400 text-lg mb-8">
+                                    Our system integrates with a variety of devices and systems, including lights, locks, thermostat, and security cameras, giving you a comprehensive and customizable smart home experience.
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div className={`bg-slate-800/50 backdrop-blur-lg p-8 rounded-2xl shadow-xl border border-slate-700/50 transition-all duration-700 ease-in-out transform md:-ml-54 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`} style={{ transitionDelay: '0.6s' }}>
+                             <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
+                                {features.map((feature, index) => (
+                                    <FeaturePill 
+                                        key={feature.title} 
+                                        {...feature}
+                                        isVisible={isVisible}
+                                        delay={`${0.8 + index * 0.2}s`}
+                                    />
+                                ))}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <style>{`
-                .feature-card .icon-container {
-                    background: radial-gradient(circle, rgba(0, 220, 255, 0.1) 0%, rgba(0, 220, 255, 0) 70%);
-                }
-                .feature-card:hover {
-                    transform: translateY(-10px);
-                    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-                }
-                .feature-card::before {
-                    content: '';
-                    position: absolute;
-                    inset: 0;
-                    border-radius: 1rem; /* rounded-2xl */
-                    padding: 2px;
-                    background: linear-gradient(45deg, rgba(0, 220, 255, 0), rgba(0, 220, 255, 0.5), rgba(0, 220, 255, 0));
-                    -webkit-mask: 
-                        linear-gradient(#fff 0 0) content-box, 
-                        linear-gradient(#fff 0 0);
-                    -webkit-mask-composite: xor;
-                    mask-composite: exclude;
-                    opacity: 0;
-                    transition: opacity 0.3s ease-in-out;
-                }
-                .feature-card:hover::before {
-                    opacity: 1;
-                }
-                .feature-card:hover .icon-container {
-                    transform: scale(1.1) translateZ(20px);
-                }
-                .section-bg-pattern {
-                    background-image: radial-gradient(circle at 1px 1px, #475569 1px, transparent 0);
-                    background-size: 30px 30px;
-                }
-            `}</style>
         </section>
     );
 };
