@@ -1,9 +1,36 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+
+// Custom hook for detecting when an element is in the viewport
+const useOnScreen = (options) => {
+    const ref = useRef(null);
+    const [isIntersecting, setIntersecting] = useState(false);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(([entry]) => {
+            if (entry.isIntersecting) {
+                setIntersecting(true);
+                observer.unobserve(entry.target);
+            }
+        }, options);
+
+        if (ref.current) {
+            observer.observe(ref.current);
+        }
+
+        return () => {
+            if (ref.current) {
+                observer.unobserve(ref.current);
+            }
+        };
+    }, [ref, options]);
+
+    return [ref, isIntersecting];
+};
 
 // Helper for Tailwind class names
 const cx = (...classes) => classes.filter(Boolean).join(' ');
 
-// SVG Icons Component - Only including the chevron icon needed for the FAQ
+// SVG Icons Component
 const Icon = ({ name, className }) => {
   const icons = {
     chevronDown: <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />,
@@ -16,31 +43,25 @@ const Icon = ({ name, className }) => {
 };
 
 // FAQ Item Component with Animation
-const FaqItem = ({ question, answer, delay }) => {
-    const [isOpen, setIsOpen] = useState(false);
+const FaqItem = ({ faq, isOpen, onClick }) => {
     const contentRef = useRef(null);
 
     return (
-        <div 
-            className="faq-item animate-fade-in-up bg-slate-800/40 backdrop-blur-lg border border-slate-700/50 rounded-lg transition-all duration-300 ease-in-out"
-            style={{ animationDelay: delay }}
-        >
+        <div className="faq-item border border-slate-700/50 rounded-lg overflow-hidden transition-all duration-300">
             <button
-                className="w-full flex justify-between items-center text-left font-semibold text-lg p-6 text-white"
-                onClick={() => setIsOpen(!isOpen)}
+                className={`w-full flex justify-between items-center text-left font-semibold text-lg p-6 transition-all duration-300 ${isOpen ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white' : 'bg-slate-800/50 text-white'}`}
+                onClick={onClick}
                 aria-expanded={isOpen}
-                aria-controls={`faq-content-${question.replace(/\s+/g, '-')}`}
             >
-                <span>{question}</span>
+                <span>{faq.q}</span>
                 <Icon name="chevronDown" className={cx('h-5 w-5 transition-transform duration-300', isOpen && 'rotate-180')} />
             </button>
             <div
                 ref={contentRef}
-                id={`faq-content-${question.replace(/\s+/g, '-')}`}
-                className="overflow-hidden transition-[max-height] duration-500 ease-in-out"
-                style={{ maxHeight: isOpen ? `${contentRef.current.scrollHeight}px` : '0px' }}
+                className="overflow-hidden transition-[max-height] duration-500 ease-in-out bg-slate-800/50"
+                style={{ maxHeight: isOpen && contentRef.current ? `${contentRef.current.scrollHeight}px` : '0px' }}
             >
-                <p className="text-gray-400 px-6 pb-6">{answer}</p>
+                <p className="text-gray-400 p-6">{faq.a}</p>
             </div>
         </div>
     );
@@ -48,49 +69,81 @@ const FaqItem = ({ question, answer, delay }) => {
 
 // Main FAQ Section Component
 export default function FAQ() {
+    const sectionRef = useRef(null);
+    const [isVisible, setIsVisible] = useState(false);
+    const [openIndex, setOpenIndex] = useState(0);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setIsVisible(true);
+                    observer.disconnect();
+                }
+            },
+            { threshold: 0.1 }
+        );
+
+        if (sectionRef.current) {
+            observer.observe(sectionRef.current);
+        }
+
+        return () => {
+            if (sectionRef.current) {
+                observer.unobserve(sectionRef.current);
+            }
+        };
+    }, []);
+
     const faqs = [
-        { q: 'How much does a smart home system cost?', a: 'Costs vary widely based on the size of your home and the features you want. We offer a free consultation to provide a custom quote with no obligation. Our packages can start from a few thousand dollars for a basic setup to comprehensive systems for larger homes.' },
-        { q: 'Can you integrate with my existing devices?', a: "Absolutely. We specialize in creating cohesive systems that work with a wide range of popular smart devices from brands like Google, Amazon, Apple, Sonos, and more. During our consultation, we'll assess your current tech and build a seamless integration plan." },
-        { q: 'How long does installation take?', a: 'Installation time depends on the complexity of the project. A simple system might take a single day, while a full-home automation project could take several days. We always provide a clear timeline upfront and work efficiently to minimize disruption to your routine.' }
+        { q: 'What is the typical installation time?', a: 'Installation time depends on the complexity of the project. A simple system might take a single day, while a full-home automation project could take several days. We always provide a clear timeline upfront and work efficiently to minimize disruption to your routine.' },
+        { q: 'Can I upgrade my existing system in the future?', a: "Absolutely. We specialize in creating scalable systems that can grow with your needs. Whether you want to add new devices or expand to other rooms, we can seamlessly integrate new features into your existing setup." },
+        { q: 'How much does a smart home system cost?', a: 'Costs vary widely based on the size of your home and the features you want. We offer a free consultation to provide a custom quote with no obligation.' },
     ];
 
     return (
-        <section id="faq" className="py-24 bg-slate-900/70 relative overflow-hidden">
-            <div className="absolute inset-0 z-0 opacity-[0.03] section-bg-pattern"></div>
-            <div className="container mx-auto px-6 max-w-4xl relative z-10">
-                <div className="text-center mb-16 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-                    <h3 className="text-cyan-400 font-semibold tracking-widest mb-2">HAVE QUESTIONS?</h3>
-                    <h2 className="text-3xl md:text-4xl font-bold text-white">Frequently Asked Questions</h2>
-                </div>
-                <div className="space-y-4">
-                    {faqs.map((faq, i) => (
-                        <FaqItem 
-                            key={i} 
-                            question={faq.q} 
-                            answer={faq.a} 
-                            delay={`${0.4 + i * 0.15}s`}
-                        />
-                    ))}
+        <section id="faq" ref={sectionRef} className="py-24 bg-slate-900 text-white relative overflow-hidden">
+            <div className="container mx-auto px-6 relative z-10">
+                <div className="grid lg:grid-cols-2 gap-12 items-start">
+                    {/* Left Column: Bento Grid */}
+                    <div className="grid grid-cols-2 gap-6 h-full">
+                        <div className={`relative rounded-2xl overflow-hidden shadow-2xl transition-all duration-700 ease-in-out transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '0.2s' }}>
+                            <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=2070&auto=format&fit=crop" alt="Team discussing plans" className="w-full h-full object-cover"/>
+                        </div>
+                        <div className={`relative rounded-2xl overflow-hidden shadow-2xl transition-all duration-700 ease-in-out transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '0.4s' }}>
+                            <img src="https://images.unsplash.com/photo-1556761175-57738720b2da?q=80&w=1974&auto=format&fit=crop" alt="Hands using a tablet" className="w-full h-full object-cover"/>
+                        </div>
+                        <div className={`col-span-2 p-8 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-2xl shadow-2xl transition-all duration-700 ease-in-out transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '0.6s' }}>
+                            <h3 className="text-2xl font-bold text-white mb-2">24/7 Dedicated Team Support</h3>
+                            <p className="text-cyan-100">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+                        </div>
+                    </div>
+                    
+                    {/* Right Column: Text and Accordion */}
+                    <div className="text-left">
+                        <div className={`transition-all duration-700 ease-in-out transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`} style={{ transitionDelay: '0.3s' }}>
+                            <h3 className="text-cyan-400 font-semibold tracking-widest mb-2 uppercase">Service FAQs</h3>
+                            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+                                Asked Questions About Our Smart Home Solutions.
+                            </h2>
+                            <p className="text-gray-400 text-lg mb-8">
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.
+                            </p>
+                        </div>
+                        <div className="space-y-4">
+                            {faqs.map((faq, i) => (
+                                <div key={i} className={`transition-all duration-700 ease-in-out transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`} style={{ transitionDelay: `${0.5 + i * 0.2}s` }}>
+                                    <FaqItem 
+                                        faq={faq} 
+                                        isOpen={openIndex === i}
+                                        onClick={() => setOpenIndex(openIndex === i ? null : i)}
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
                 </div>
             </div>
-            <style>{`
-                @keyframes fade-in-up {
-                    from { opacity: 0; transform: translateY(20px); }
-                    to { opacity: 1; transform: translateY(0); }
-                }
-                .animate-fade-in-up {
-                    animation: fade-in-up 0.8s ease-out forwards;
-                    opacity: 0;
-                }
-                .section-bg-pattern {
-                    background-image: radial-gradient(circle at 1px 1px, #475569 1px, transparent 0);
-                    background-size: 30px 30px;
-                }
-                .faq-item:hover {
-                    border-color: rgba(0, 220, 255, 0.3);
-                    transform: translateY(-5px);
-                }
-            `}</style>
         </section>
     );
 };

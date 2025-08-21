@@ -129,7 +129,7 @@ const HowItWorks = () => {
                             className={`transition-all duration-700 ease-in-out transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}
                             style={{ transitionDelay: '0.4s' }}
                         >
-                            <h3 className="text-cyan-400 font-semibold tracking-widest mb-2 uppercase">Our Value</h3>
+                            <h3 className="text-cyan-400 font-semibold tracking-widest mb-2 uppercase">How We Work</h3>
                             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
                                 Experience Unparalleled Service And Cutting-Edge Technology.
                             </h2>

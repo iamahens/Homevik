@@ -18,7 +18,7 @@ const Hero = () => {
         };
     }, []);
 
-    const staggeredText = "The Magic of a Home That Listens.".split(" ").map((word, index) => (
+    const staggeredText = "Website Coming Soon.".split(" ").map((word, index) => (
         <span key={index} className="inline-block mr-4">
             {word.split("").map((char, charIndex) => (
                 <span 

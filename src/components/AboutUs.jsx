@@ -98,6 +98,7 @@ const AboutUs = () => {
 
                      {/* Right Column: Text Content */}
                     <div className="text-center md:text-left">
+                        <p className="text-cyan-400 text-2xl md:text-2xl font-bold mb-4">About Us</p>
                         <h2 className="text-3xl md:text-4xl font-bold mb-4">
                             With The Latest Technological Intelligence
                         </h2>
