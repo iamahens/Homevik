@@ -15,7 +15,7 @@ const Header = () => {
     <header className="bg-slate-900/50 backdrop-blur-sm shadow-lg sticky top-0 z-50 border-b border-slate-800">
       <nav className="container mx-auto px-6 py-4 flex justify-between items-center">
         {/* <a href="#" className="text-2xl font-bold text-white" style={{textShadow: '0 0 8px rgba(0, 220, 255, 0.7)'}}>SmartHome</a> */}
-        <img src="/logo.png" alt="" className='w-[160px] h-[70px]' />
+        <img src="/logo.png" alt="" className='w-[170px] h-[70px]' />
         <div className="hidden md:flex space-x-8 items-center">
           {navLinks.map(link => (
             <a key={link.name} href={link.href} className="text-gray-300 hover:text-cyan-400 transition duration-300">{link.name}</a>

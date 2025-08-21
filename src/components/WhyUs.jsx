@@ -29,17 +29,17 @@ const useOnScreen = (options) => {
 
 // SVG Icons Component
 const Icon = ({ name, className }) => {
-  const icons = {
-    solution: <path strokeLinecap="round" strokeLinejoin="round" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M12 6V3m0 18v-3M5.636 5.636l-1.414-1.414M19.778 19.778l-1.414-1.414M19.778 5.636l-1.414 1.414M5.636 19.778l-1.414-1.414M12 12a6 6 0 110-12 6 6 0 010 12z" />,
-    expert: <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />,
-    support: <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />,
-    future: <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />,
-  };
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
-      {icons[name]}
-    </svg>
-  );
+    const icons = {
+        solution: <path strokeLinecap="round" strokeLinejoin="round" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M12 6V3m0 18v-3M5.636 5.636l-1.414-1.414M19.778 19.778l-1.414-1.414M19.778 5.636l-1.414 1.414M5.636 19.778l-1.414-1.414M12 12a6 6 0 110-12 6 6 0 010 12z" />,
+        expert: <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />,
+        support: <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />,
+        future: <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />,
+    };
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
+            {icons[name]}
+        </svg>
+    );
 };
 
 // A new card component for the "Why Us" section
@@ -106,21 +106,8 @@ const WhyUs = () => {
         <section id="why-us" ref={sectionRef} className="py-24 bg-white text-slate-900">
             <div className="container mx-auto px-6">
                 <div className="grid md:grid-cols-2 gap-12 items-center">
-                    {/* Left Column: Image */}
-                    <div 
-                        className={`transition-all duration-1000 ease-in-out transform ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
-                        style={{ transitionDelay: '0.2s' }}
-                    >
-                        <div className="relative rounded-2xl overflow-hidden shadow-2xl h-[550px]">
-                            <img 
-                                src="https://images.unsplash.com/photo-1558002038-1055907df827?q=80&w=1974&auto=format&fit=crop" 
-                                alt="Couple using a smart home device" 
-                                className="w-full h-full object-cover"
-                            />
-                        </div>
-                    </div>
-
-                    {/* Right Column: Text Content */}
+                    
+                    {/* LEFT COLUMN: Text Content */}
                     <div className="text-left">
                         <div 
                             className={`transition-all duration-700 ease-in-out transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}
@@ -144,6 +131,20 @@ const WhyUs = () => {
                                     delay={`${0.6 + index * 0.2}s`}
                                 />
                             ))}
+                        </div>
+                    </div>
+
+                    {/* RIGHT COLUMN: Image */}
+                    <div 
+                        className={`transition-all duration-1000 ease-in-out transform ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
+                        style={{ transitionDelay: '0.2s' }}
+                    >
+                        <div className="relative rounded-2xl overflow-hidden shadow-2xl h-[550px]">
+                            <img 
+                                src="https://images.unsplash.com/photo-1558002038-1055907df827?q=80&w=1974&auto=format&fit=crop" 
+                                alt="Couple using a smart home device" 
+                                className="w-full h-full object-cover"
+                            />
                         </div>
                     </div>
                 </div>

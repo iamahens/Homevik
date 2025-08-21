@@ -111,7 +111,7 @@ export default function FAQ() {
                             <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=2070&auto=format&fit=crop" alt="Team discussing plans" className="w-full h-full object-cover"/>
                         </div>
                         <div className={`relative rounded-2xl overflow-hidden shadow-2xl transition-all duration-700 ease-in-out transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '0.4s' }}>
-                            <img src="https://images.unsplash.com/photo-1556761175-57738720b2da?q=80&w=1974&auto=format&fit=crop" alt="Hands using a tablet" className="w-full h-full object-cover"/>
+                            <img src="/faq.jpg" alt="Hands using a tablet" className="w-full h-full object-cover"/>
                         </div>
                         <div className={`col-span-2 p-8 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-2xl shadow-2xl transition-all duration-700 ease-in-out transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '0.6s' }}>
                             <h3 className="text-2xl font-bold text-white mb-2">24/7 Dedicated Team Support</h3>

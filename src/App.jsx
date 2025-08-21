@@ -11,7 +11,8 @@ import Footer from "./components/Footer"
 import ControlOptions from "./components/ControlOptions"
 import AboutUs from "./components/AboutUs"
 import Services from "./components/Services"
-import Categories from "./components/Categories"
+// import TestimonialsCarousel from "./components/TestimonialsCarousel"
+// import Categories from "./components/Categories"
 
 
 function App() {
@@ -25,13 +26,14 @@ function App() {
 
         <Features/>
         <ProjectShowcase/>
-        <Categories/>
+        {/* <Categories/> */}
         <Services/>
         <WhyUs/>
        
         <HowItWorks/>
         
         <Testimonials/>
+        {/* <TestimonialsCarousel/> */}
         <FAQ/>
         <Contact/>
       </main>

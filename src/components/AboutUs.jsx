@@ -58,7 +58,18 @@ const AboutUs = () => {
             <div className="container mx-auto px-6">
                 <div className="grid md:grid-cols-2 gap-12 items-center">
                     
-                    {/* Left Column: Bentobox Collage with a 5-column, 4-row grid for more flexibility */}
+                    {/* LEFT COLUMN: Text Content */}
+                    <div className="text-center md:text-left">
+                        <p className="text-cyan-400 text-2xl md:text-2xl font-bold mb-4">About Us</p>
+                        <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                            With The Latest Technological Intelligence
+                        </h2>
+                        <p className="text-lg text-slate-600 leading-relaxed">
+                            At <strong>Homevik</strong>, our system integrates with a wide variety of devices and systems, including lights, locks, thermostats, and security cameras, giving you a comprehensive and customizable smart home experience. Plus, with advanced features like voice control, you can manage your home hands-free, making it even more convenient to use.
+                        </p>
+                    </div>
+
+                    {/* RIGHT COLUMN: Bento Box Collage with a 5-column, 4-row grid for more flexibility */}
                     <div className="grid grid-cols-5 grid-rows-4 gap-4 h-[500px]">
                         <BentoBox 
                             className="col-span-3 row-span-3" 
@@ -72,7 +83,7 @@ const AboutUs = () => {
                             altText="Smart security camera on a wall"
                             delay="0.4s"
                         />
-                         <BentoBox 
+                        <BentoBox 
                             className="col-span-2 row-span-1" 
                             bgColor="#2C2C2C" // Dark color block - now shorter
                             delay="0.6s"
@@ -83,32 +94,21 @@ const AboutUs = () => {
                             altText="Smart fan"
                             delay="0.8s"
                         />
-                         <BentoBox 
+                        <BentoBox 
                             className="col-span-1 row-span-1" 
                             bgColor="#0052FF" // Blue box
                             delay="1s"
                         />
-                         <BentoBox 
+                        <BentoBox 
                             className="col-span-2 row-span-1" 
                             imageUrl="/switch.jpg" 
                             altText="Smart thermostat on a wall"
                             delay="1.2s"
                         />
                     </div>
-
-                     {/* Right Column: Text Content */}
-                    <div className="text-center md:text-left">
-                        <p className="text-cyan-400 text-2xl md:text-2xl font-bold mb-4">About Us</p>
-                        <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                            With The Latest Technological Intelligence
-                        </h2>
-                        <p className="text-lg text-slate-600 leading-relaxed">
-                            At <strong>Homevik</strong>, our system integrates with a wide variety of devices and systems, including lights, locks, thermostats, and security cameras, giving you a comprehensive and customizable smart home experience. Plus, with advanced features like voice control, you can manage your home hands-free, making it even more convenient to use.
-                        </p>
-                    </div>
                 </div>
             </div>
-             <style>{`
+            <style>{`
                 @keyframes fade-in-up {
                     from { opacity: 0; transform: translateY(30px) scale(0.95); }
                     to { opacity: 1; transform: translateY(0) scale(1); }

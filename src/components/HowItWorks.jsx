@@ -134,7 +134,7 @@ const HowItWorks = () => {
                                 Experience Unparalleled Service And Cutting-Edge Technology.
                             </h2>
                             <p className="text-gray-400 text-lg mb-8">
-                                At Homevik, we believe in creating homes that are not just smart, but intelligent. Our mission is to simplify your life through state-of-the-art automation, tailored to your unique needs.
+                                At Homevik, we believe in creating homes that are not just smart, but intelligent. Our mission is to simplify your life through state-of-the-art automation to your unique needs.
                             </p>
                         </div>
                         
