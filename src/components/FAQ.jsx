@@ -16,12 +16,15 @@ const Icon = ({ name, className }) => {
 };
 
 // FAQ Item Component with Animation
-const FaqItem = ({ question, answer }) => {
+const FaqItem = ({ question, answer, delay }) => {
     const [isOpen, setIsOpen] = useState(false);
     const contentRef = useRef(null);
 
     return (
-        <div className="bg-slate-800/50 backdrop-blur-lg border border-slate-700/50 rounded-lg transition-all duration-300 ease-in-out hover:bg-slate-800/70 hover:border-cyan-400/50">
+        <div 
+            className="faq-item animate-fade-in-up bg-slate-800/40 backdrop-blur-lg border border-slate-700/50 rounded-lg transition-all duration-300 ease-in-out"
+            style={{ animationDelay: delay }}
+        >
             <button
                 className="w-full flex justify-between items-center text-left font-semibold text-lg p-6 text-white"
                 onClick={() => setIsOpen(!isOpen)}
@@ -52,15 +55,42 @@ export default function FAQ() {
     ];
 
     return (
-        <section id="faq" className="py-24 bg-slate-900/70">
-            <div className="container mx-auto px-6 max-w-4xl">
-                <div className="text-center mb-16">
+        <section id="faq" className="py-24 bg-slate-900/70 relative overflow-hidden">
+            <div className="absolute inset-0 z-0 opacity-[0.03] section-bg-pattern"></div>
+            <div className="container mx-auto px-6 max-w-4xl relative z-10">
+                <div className="text-center mb-16 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+                    <h3 className="text-cyan-400 font-semibold tracking-widest mb-2">HAVE QUESTIONS?</h3>
                     <h2 className="text-3xl md:text-4xl font-bold text-white">Frequently Asked Questions</h2>
                 </div>
                 <div className="space-y-4">
-                    {faqs.map((faq, i) => <FaqItem key={i} question={faq.q} answer={faq.a} />)}
+                    {faqs.map((faq, i) => (
+                        <FaqItem 
+                            key={i} 
+                            question={faq.q} 
+                            answer={faq.a} 
+                            delay={`${0.4 + i * 0.15}s`}
+                        />
+                    ))}
                 </div>
             </div>
+            <style>{`
+                @keyframes fade-in-up {
+                    from { opacity: 0; transform: translateY(20px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+                .animate-fade-in-up {
+                    animation: fade-in-up 0.8s ease-out forwards;
+                    opacity: 0;
+                }
+                .section-bg-pattern {
+                    background-image: radial-gradient(circle at 1px 1px, #475569 1px, transparent 0);
+                    background-size: 30px 30px;
+                }
+                .faq-item:hover {
+                    border-color: rgba(0, 220, 255, 0.3);
+                    transform: translateY(-5px);
+                }
+            `}</style>
         </section>
     );
 };

@@ -1,10 +1,21 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 // Card component for each control method
-const ControlMethodCard = ({ title, description, bgImage }) => {
+const ControlMethodCard = ({ title, description, bgImage, index }) => {
+    const [isVisible, setIsVisible] = useState(false);
+
+    useEffect(() => {
+        // Use a timeout to stagger the appearance of each card
+        const timeout = setTimeout(() => {
+            setIsVisible(true);
+        }, index * 150); // Adjust the delay time (e.g., 150ms per card)
+
+        return () => clearTimeout(timeout);
+    }, [index]);
+
     return (
         <div 
-            className="relative h-96 w-full rounded-lg overflow-hidden group cursor-pointer"
+            className={`relative h-96 w-full rounded-lg overflow-hidden group cursor-pointer transform transition-all duration-1000 ease-in-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
         >
             {/* Background Image using an <img> tag for better reliability */}
             <img 
@@ -14,10 +25,10 @@ const ControlMethodCard = ({ title, description, bgImage }) => {
             />
             
             {/* Overlay for text readability */}
-            <div className="absolute inset-0  bg-opacity-40 group-hover:bg-opacity-70 transition-all duration-500 ease-in-out"></div>
+            <div className="absolute inset-0  group-hover:bg-opacity-70 transition-all duration-500 ease-in-out"></div>
             
             {/* Text Content Container */}
-            <div className="absolute bg-black  bottom-0 left-0 right-0 p-6 text-white transition-all duration-500 ease-in-out">
+            <div className="absolute bg-black bottom-0 left-0 right-0 p-6 text-white transition-all duration-500 ease-in-out">
                 <h3 className="text-2xl font-bold">{title}</h3>
                 {/* Description slides up on hover */}
                 <div className="max-h-0 opacity-0 group-hover:max-h-48 group-hover:opacity-100 transition-all duration-500 ease-in-out mt-2">
@@ -61,8 +72,8 @@ export default function InteractiveControl() {
     return (
         <section id="interactive-control" className="bg-slate-900 py-4">
             <div className="grid grid-cols-1 md:grid-cols-5 gap-4 p-4">
-                {controlMethods.map(method => (
-                    <ControlMethodCard key={method.title} {...method} />
+                {controlMethods.map((method, index) => (
+                    <ControlMethodCard key={method.title} {...method} index={index} />
                 ))}
             </div>
         </section>
